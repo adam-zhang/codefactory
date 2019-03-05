@@ -1,2 +1,2 @@
 # codefactory
-In c++ programming, I need a tool which produces the code template for me like classes, functions or simple project.
+In c++ programming, I need a tool which produces the code template like classes, functions or simple project for med.

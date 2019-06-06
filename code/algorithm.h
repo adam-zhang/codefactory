@@ -8,9 +8,9 @@ template<typename T>
 std::basic_string<T> toUpper(const std::basic_string<T>& value)
 {
 	std::basic_string<T> o;
-	for(auto c : value)
+	for(auto c = value.begin(); c != value.end(); ++c)
 	{
-		int i = c;
+		int i = *c;
 		int r = std::toupper(i);
 		o.push_back((T)r);
 	}

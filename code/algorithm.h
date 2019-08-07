@@ -20,12 +20,12 @@ std::basic_string<T> toUpper(const std::basic_string<T>& value)
 template<typename T>
 std::basic_string<T> toLower(const std::basic_string<T>& value)
 {
-	std::basic_string<T> s;
+	std::basic_string<T> o;
 	for(auto c : value)
 	{
 		int r = std::tolower((int)c);
 		o.push_back((T)r);
 	}
-	return s;
+	return o;
 }
 #endif//__ALGORITHM__H

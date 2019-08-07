@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
-set (CMAKE_INSTALL_PREFIX /usr/bin)
+if (WIN32)
+	set(CMAKE_INSTALL_PREFIX c:/windows/system32)
+else()
+	set (CMAKE_INSTALL_PREFIX /usr/bin)
+endif()
 project(codefactory)
 set(CMAKE_BUILD_TYPE Release)
 set(sources main.cpp

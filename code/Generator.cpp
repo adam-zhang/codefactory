@@ -72,6 +72,7 @@ static bool generateMainFile()
 		<< "int main(int argc, char** argv)\n"
 		<< "{\n"
 		<< "\tcout << \"Hello World.\" << endl;\n"
+		<< "\treturn 0;\n"
 		<< "}";
 	return true;
 }

@@ -1,12 +1,7 @@
 #include "Generator.h"
 #include "algorithm.h"
 #include <fstream>
-//#ifdef WIN32
-//#include <windows.h>
-//#else
-//#include <sys/stat.h>
-//#include <sys/types.h>
-//#endif
+#include <sstream>
 
 using namespace std;
 
@@ -90,4 +85,88 @@ static bool generateMainFile()
 bool generateProject(const string& projectName)
 {
        	return generateCMakeFile(projectName) && generateMainFile();
+}
+
+
+bool generateQtCMakeFile(const string& projectName)
+{
+	ofstream file("CMakeLists.txt");
+	if (!file)
+		return false;
+	stringstream ss;
+	ss << "cmake_minimum_required(VERSION 3.1.0)\n"
+		<< "project(" << projectName << ")\n"
+		<< "set(CMAKE_INCLUDE_CURRENT_DIR ON)\n"
+		<< "set(CMAKE_AUTOMOC ON)\n"
+		<< "find_package(Qt5Widgets CONFIG REQUIRED)\n"
+		<< "set(sources main.cpp\n"
+		<< "\tMainWindow.cpp)\n"
+		<< "add_executable(${PROJECT_NAME} ${sources})\n"
+		<< "target_link_libraries(${PROJECT_NAME} Qt5::Widgets)";
+	file << ss.str();
+	return true;
+}
+
+
+string generateMainContent()
+{
+	stringstream ss;
+	ss << "#include <QApplication>\n"
+		<< "#include \"MainWindow.h\""
+		<< "\n"
+		<< "int main(int argc, char** argv)\n"
+		<< "\{\n"
+		<< "\tQApplication a(argc, argv);\n"
+		<< "\tMainWindow w;\n"
+		<< "\tw.show();\n"
+		<< "\treturn a.exec();\n"
+		<< "}";
+	return ss.str();
+}
+
+bool generateQtMainFile()
+{
+	ofstream file("main.cpp");
+	if (!file)
+		return false;
+	file << generateMainContent();
+	return true;
+}
+
+bool generateMainWindowHeadFile()
+{
+	ofstream file("MainWindow.h");
+	if (!file)
+		return false;	
+	stringstream ss;
+	ss << "#ifndef __MAINWINDOW__H\n"
+		<< "#define __MAINWINDOW__H\n"
+		<< "#include <QMainWindow>\n"
+		<< "\n"
+		<< "class MainWindow : public QMainWindow\n"
+		<< "{\n"
+		<< "\tQ_OBJECT\n"
+		<< "public:\n"
+		<< "\tMainWindow();\n"
+		<< "\t~MainWindow();\n"
+		<< "};\n\n"
+		<< "#endif//__MAINWINDOW__H";
+	file << ss.str();
+	return true;
+}
+
+bool generateMainWindowCpp()
+{
+	return generateCppFile("MainWindow");
+}
+
+bool generateMainWindowFiles()
+{
+	return generateMainWindowHeadFile() && generateMainWindowCpp();
+}
+
+
+bool generateQtProject(const string& projectName)
+{
+	return generateQtCMakeFile(projectName) && generateQtMainFile() && generateMainWindowFiles();
 }

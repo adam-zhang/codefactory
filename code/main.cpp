@@ -27,5 +27,9 @@ int main(int argc, char** argv)
 	{
 		generateProject(analyzer.argument(2));
 	}
+	if (analyzer.argument(1) == "--qtproject")
+	{
+		generateQtProject(analyzer.argument(2));
+	}
 	return 0;
 }

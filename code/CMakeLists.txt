@@ -4,6 +4,7 @@ if (WIN32)
 else()
 	set (CMAKE_INSTALL_PREFIX /usr/bin)
 endif()
+add_compile_options(-std=c++11)
 project(codefactory)
 set(CMAKE_BUILD_TYPE Release)
 set(sources main.cpp

@@ -6,4 +6,5 @@
 bool generateClass(const std::string& name);
 bool generateProject(const std::string& name);
 bool generateQtProject(const std::string& name);
+bool generateSingleton();
 #endif//__GERNERATOR__H

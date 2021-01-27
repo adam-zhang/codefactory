@@ -18,10 +18,7 @@ int main(int argc, char** argv)
 		if (analyzer.argument(1) == "--singleton")
 			generateSingleton();
 		else if (analyzer.argument(1) == "--help")
-		{
 			Logger::output(Notice::usage());
-			return 0;
-		}
 		else
 			Logger::output(Notice::usage());
 	}

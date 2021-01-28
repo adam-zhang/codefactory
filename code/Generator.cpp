@@ -250,3 +250,123 @@ bool generateSingleton()
 	writeFileContent(fileName, content());
 	return true;
 }
+
+string threadPoolHeader()
+{
+	return	"#ifndef __THREADPOOL__H\n"
+		"#define __THREADPOOL__H\n"
+		"\n"
+		"#include <vector>\n"
+		"#include <functional>\n"
+		"#include <thread>\n"
+		"#include <mutex>\n"
+		"#include <queue>\n"
+		"#include <condition_variable>\n"
+		"#include <atomic>\n"
+		"\n"
+		"class ThreadPool\n"
+		"{\n"
+		"public:\n"
+		"	explicit ThreadPool(int count);\n"
+		"	ThreadPool(const ThreadPool&) =delete;\n"
+		"	ThreadPool& operator=(const ThreadPool&) = delete;\n"
+		"	~ThreadPool();\n"
+		"public:\n"
+		"	using Task = std::function<void()>;\n"
+		"public:\n"
+		"	void start();\n"
+		"	void stop();\n"
+		"	void append(const Task& task);\n"
+		"private:\n"
+		"	int threadCount_;\n"
+		"	std::vector<std::thread> threads_;\n"
+		"	std::mutex mutex_;\n"
+		"	std::queue<Task> tasks_;\n"
+		"	std::condition_variable condition_;\n"
+		"	std::atomic<bool> isRunning_;\n"
+		"private:\n"
+		"	void work();\n"
+		"};\n"
+		"#endif//__THREADPOOL__H\n";
+}
+
+string threadPoolImpletement()
+{
+	return "#include \"ThreadPool.h\"\n"
+		"#include <iostream>\n"
+		"\n"
+		"ThreadPool::ThreadPool(int count)\n"
+		"	: threadCount_(count)\n"
+		"	  , isRunning_(false)\n"
+		"{\n"
+		"}\n"
+		"\n"
+		"ThreadPool::~ThreadPool()\n"
+		"{\n"
+		"}\n"
+		"\n"
+		"void ThreadPool::start()\n"
+		"{\n"
+		"	isRunning_ = true;\n"
+		"	for(int i = 0; i != threadCount_; ++i)\n"
+		"		threads_.emplace_back(std::thread(&ThreadPool::work, this));\n"
+		"}\n"
+		"\n"
+		"void ThreadPool::work()\n"
+		"{\n"
+		"	while(isRunning_)\n"
+		"	{\n"
+		"		Task task;\n"
+		"		std::unique_lock<std::mutex> lock(mutex_);\n"
+		"		if (!tasks_.empty())\n"
+		"		{\n"
+		"			task = tasks_.front();\n"
+		"			tasks_.pop();\n"
+		"		}\n"
+		"		else if(isRunning_ && tasks_.empty())\n"
+		"			condition_.wait(lock);\n"
+		"		if (task)\n"
+		"			task();\n"
+		"	}\n"
+		"}	\n"
+		"\n"
+		"void ThreadPool::stop()\n"
+		"{\n"
+		"	{\n"
+		"		std::unique_lock<std::mutex> lock;\n"
+		"		isRunning_ = false;\n"
+		"		condition_.notify_all();\n"
+		"	}\n"
+		"	for(std::thread& t : threads_)\n"
+		"		if (t.joinable())\n"
+		"			t.join();\n"
+		"}\n"
+		"\n"
+		"void ThreadPool::append(const Task& task)\n"
+		"{\n"
+		"	if (isRunning_)\n"
+		"	{\n"
+		"		std::unique_lock<std::mutex> lock;\n"
+		"		tasks_.push(task);\n"
+		"		condition_.notify_one();\n"
+		"	}\n"
+		"}\n";
+}
+
+void generateThreadPoolHeaderFile()
+{
+	auto fileName = "ThreadPool.h";
+	writeFileContent(fileName, threadPoolHeader());
+}
+
+void generateThreadPoolImpletementFile()
+{
+	auto fileName = "ThreadPool.cpp";
+	writeFileContent(fileName, threadPoolImpletement());
+}
+
+bool generateThreadPool()
+{
+	generateThreadPoolHeaderFile();
+	generateThreadPoolImpletementFile();
+}

@@ -369,4 +369,28 @@ bool generateThreadPool()
 {
 	generateThreadPoolHeaderFile();
 	generateThreadPoolImpletementFile();
+	return true;
+}
+
+string properties()
+{
+	return	"#ifndef __PROPERTIES__H\n"
+		"#define __PROPERTIES__H\n"
+		"\n"
+		"#define PROPERTY(type, name, method) \\\n"
+		"         private: \\\n"
+		"                  type name##_; \\\n"
+		"         public: \\\n"
+		"                  const type& name()const \\\n"
+		"                  { return name##_; } \\\n"
+		"                  void method(const type& value) \\\n"
+		"                  { name##_ = value; }\n"
+		"#endif//__PROPERTIES__H\n";
+}
+
+bool generateProperties()
+{
+	auto fileName = "Properties.h";
+	writeFileContent(fileName, properties());
+	return true;
 }

@@ -19,6 +19,8 @@ int main(int argc, char** argv)
 			generateSingleton();
 		else if (analyzer.argument(1) == "--threadpool")
 			generateThreadPool();
+		else if (analyzer.argument(1) == "--properties")
+			generateProperties();
 		else if (analyzer.argument(1) == "--help")
 			Logger::output(Notice::usage());
 		else

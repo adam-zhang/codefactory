@@ -9,4 +9,5 @@ bool generateQtProject(const std::string& name);
 bool generateSingleton();
 bool generateThreadPool();
 bool generateProperties();
+bool generateQueue();
 #endif//__GERNERATOR_

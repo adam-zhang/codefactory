@@ -173,7 +173,8 @@ bool generateQtProject(const string& projectName)
 
 const std::string content()
 {
-	return "#define __SINGLETON__H\n"
+	return	"#ifndef __SINGLETON__H\n" 
+		"#define __SINGLETON__H\n"
 		"\n"
 		"#include <memory>\n"
 		"#include <mutex>\n"
@@ -392,5 +393,61 @@ bool generateProperties()
 {
 	auto fileName = "Properties.h";
 	writeFileContent(fileName, properties());
+	return true;
+}
+
+string queue()
+{
+	return "#ifndef __QUEUE__H\n"
+		"#define __QUEUE__H \n"
+		"\n"
+		"#include <queue>\n"
+		"#include <mutex>\n"
+		"#include <condition_variable>\n"
+		"#include <initializer_list>\n"
+		"#include <iostream>\n"
+		"\n"
+		"template<typename T>\n"
+		"class Queue\n"
+		"{\n"
+		"	private:\n"
+		"		std::mutex mutex_;\n"
+		"		std::condition_variable condition_;\n"
+		"		std::queue<T> data_;\n"
+		"	public:\n"
+		"		Queue()=default;\n"
+		"		Queue(const Queue&)=delete;\n"
+		"		Queue& operator=(const Queue&)=delete;\n"
+		"\n"
+		"		void push(const T& value)\n"
+		"		{\n"
+		"			std::lock_guard<std::mutex> lock(mutex_);\n"
+		"			data_.push(value);\n"
+		"			condition_.notify_one();\n"
+		"		}\n"
+		"\n"
+		"		T pop( )\n"
+		"		{\n"
+		"			std::unique_lock<std::mutex> lock(mutex_);\n"
+		"			while(data_.empty())\n"
+		"				condition_.wait(lock);\n"
+		"			T value = data_.front();\n"
+		"			data_.pop();\n"
+		"			return value;\n"
+		"		}\n"
+		"\n"
+		"		size_t size() \n"
+		"		{\n"
+		"			std::lock_guard<std::mutex> lock(mutex_);\n"
+		"			return data_.size();\n"
+		"		}\n"
+		"}; \n"
+		"\n"
+		"#endif//__QUEUE__H\n";
+}
+
+bool generateQueue()
+{
+	writeFileContent("Queue.h", queue());
 	return true;
 }

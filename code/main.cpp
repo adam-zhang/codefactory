@@ -21,6 +21,8 @@ int main(int argc, char** argv)
 			generateThreadPool();
 		else if (analyzer.argument(1) == "--properties")
 			generateProperties();
+		else if (analyzer.argument(1) == "--queue")
+			generateQueue();
 		else if (analyzer.argument(1) == "--help")
 			Logger::output(Notice::usage());
 		else

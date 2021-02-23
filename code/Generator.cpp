@@ -2,15 +2,35 @@
 #include "algorithm.h"
 #include <fstream>
 #include <sstream>
+#include <chrono>
+#include <ctime>
 
 using namespace std;
+
+string currentTime()
+{
+	std::time_t tt = chrono::system_clock::to_time_t(chrono::system_clock::now());
+	return ctime(&tt);
+}
+
+static string authorInfo(const string& fileName)
+{
+	return "/********************************************************************************\n"
+		"> FileName:\t" + fileName +
+		"\n> Author:\tMingping Zhang\n"
+		"> Email:\tmingpingzhang@163.com\n" + 
+		"> Create Time:\t" + currentTime() +
+		"********************************************************************************/\n";
+}
 
 static bool generateCppFile(const string& className)
 {
 	ofstream file(className + ".cpp");
 	if (!file)
 		return false;
-	file << "#include \"" << className << ".h\"\n\n"
+	file << authorInfo(className + ".cpp") 
+		<< "\n"
+		<< "#include \"" << className << ".h\"\n\n"
 		<< className << "::" << className << "()\n"
 		<< "{\n"
 		<< "}\n\n"
@@ -25,7 +45,8 @@ static bool generateHeadFile(const string& className)
 	ofstream file(className + ".h");
 	if (!file)
 		return false;
-	file << "#ifndef __" << toUpper(className) << "__H\n" 
+	file << authorInfo(className + ".h")
+		<< "#ifndef __" << toUpper(className) << "__H\n" 
 		<<"#define __" << toUpper(className) << "__H\n"
 		<< "\n\n"
 		<< "class " << className << "\n"

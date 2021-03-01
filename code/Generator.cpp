@@ -472,3 +472,59 @@ bool generateQueue()
 	writeFileContent("Queue.h", queue());
 	return true;
 }
+
+void generateSourceFile()
+{
+	auto content = "#include <GLFW/glfw3.h>\n"
+		"int main(void)\n"
+		"{\n"
+		"    GLFWwindow* window;\n"
+		"    /* Initialize the library */\n"
+		"    if (!glfwInit())\n"
+		"        return -1;\n"
+		"    /* Create a windowed mode window and its OpenGL context */\n"
+		"    window = glfwCreateWindow(640, 480, \"Hello World\", NULL, NULL);\n"
+		"    if (!window)\n"
+		"    {\n"
+		"        glfwTerminate();\n"
+		"        return -1;\n"
+		"    }\n"
+		"    /* Make the window's context current */\n"
+		"    glfwMakeContextCurrent(window);\n"
+		"    /* Loop until the user closes the window */\n"
+		"    while (!glfwWindowShouldClose(window))\n"
+		"    {\n"
+		"        /* Render here */\n"
+		"        glClear(GL_COLOR_BUFFER_BIT);\n"
+		"        /* Swap front and back buffers */\n"
+		"        glfwSwapBuffers(window);\n"
+		"        /* Poll for and process events */\n"
+		"        glfwPollEvents();\n"
+		"    }\n"
+		"    glfwTerminate();\n"
+		"    return 0;\n"
+		"}\n";
+	writeFileContent("main.cpp", content);
+}
+
+void generateOpenGLCMakeFile(const std::string& name)
+{
+	string content = "cmake_minimum_required(VERSION 2.8)\n"
+		"project(glTest)\n"
+		"find_package(OpenGL REQUIRED)\n"
+		"include_directories(${OpenGL_INCLUDE_DIRS})\n"
+		"link_directories(${OpenGL_LIBRARY_DIRS})\n"
+		"add_definitions(${OpenGL_DEFINITIONS})\n"
+		"find_package(glfw3 REQUIRED)\n"
+		"set(sources main.cpp)\n"
+		"add_executable(${PROJECT_NAME} ${sources})\n"
+		"target_link_libraries(${PROJECT_NAME} glfw3 dl pthread GL)\n";
+	writeFileContent("CMakeLists.txt", content);
+}
+
+bool generateOpenGLProject(const std::string& name)
+{
+	generateOpenGLCMakeFile(name);
+	generateSourceFile();
+	return true;
+}

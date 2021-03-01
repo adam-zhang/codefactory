@@ -43,6 +43,8 @@ int main(int argc, char** argv)
 		{
 			generateQtProject(analyzer.argument(2));
 		}
+		else if (analyzer.argument(1) == "--opengl")
+			generateOpenGLProject(analyzer.argument(2));
 	}
 	return 0;
 }

@@ -168,7 +168,7 @@ bool generateMainWindowHeadFile()
 		<< "{\n"
 		<< "\tQ_OBJECT\n"
 		<< "public:\n"
-		<< "\tMainWindow();\n"
+		<< "\tMainWindow(QWidget* parent = 0);\n"
 		<< "\t~MainWindow();\n"
 		<< "};\n\n"
 		<< "#endif//__MAINWINDOW__H";
@@ -178,7 +178,18 @@ bool generateMainWindowHeadFile()
 
 bool generateMainWindowCpp()
 {
-	return generateCppFile("MainWindow");
+	ofstream file("MainWindow.cpp");
+	if (!file)
+		return false;
+	stringstream ss;
+	ss << "#include \"MainWindow.h\"\n\n"
+		<< "MainWindow::MainWindow(QWidget* parent)\n"
+		<< "{\n"
+		<< "};\n\n"
+		<< "MainWindow::~MainWindow()\n"
+		<< "{\n}";
+	file << ss.str();
+	return true;
 }
 
 bool generateMainWindowFiles()

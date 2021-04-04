@@ -23,6 +23,8 @@ int main(int argc, char** argv)
 			generateProperties();
 		else if (analyzer.argument(1) == "--queue")
 			generateQueue();
+		else if (analyzer.argument(1) == "--logger")
+			generateLogger();
 		else if (analyzer.argument(1) == "--help")
 			Logger::output(Notice::usage());
 		else

@@ -11,4 +11,5 @@ bool generateSingleton();
 bool generateThreadPool();
 bool generateProperties();
 bool generateQueue();
+bool generateLogger();
 #endif//__GERNERATOR_

@@ -539,3 +539,105 @@ bool generateOpenGLProject(const std::string& name)
 	generateSourceFile();
 	return true;
 }
+
+std::string loggerHeader()
+{
+	return "#ifndef __LOGGER__H\n"
+		"#define __LOGGER__H\n"
+		"\n"
+		"#include <string>\n"
+		"#include <sstream>\n"
+		"\n"
+		"class Logger\n"
+		"{\n"
+		"private:\n"
+		"	Logger();\n"
+		"	~Logger();\n"
+		"public:\n"
+		"	static void write(const std::string& text);\n"
+		"	template<typename T>\n"
+		"	static void write(const std::string& note, const T& value)\n"
+		"	{\n"
+		"		std::stringstream ss;\n"
+		"		ss << note << \":\" << value;		\n"
+		"		write(ss.str());\n"
+		"	}\n"
+		"};\n"
+		"#endif//__LOGGER__H";
+}
+
+std::string loggerCpp()
+{
+	return "#include \"Logger.h\"\n"
+		"#include <chrono>\n"
+		"#include <iomanip>\n"
+		"#include <fstream>\n"
+		"\n"
+		"using namespace std;\n"
+		"using namespace chrono;\n"
+		"\n"
+		"Logger::Logger()\n"
+		"{\n"
+		"}\n"
+		"\n"
+		"Logger::~Logger()\n"
+		"{\n"
+		"}\n"
+		"\n"
+		"static string getFileName()\n"
+		"{\n"
+		"	auto current = system_clock::now();\n"
+		"	auto t = system_clock::to_time_t(current);\n"
+		"	stringstream ss;\n"
+		"	ss << put_time(localtime(&t), \"%Y-%m-%d\");\n"
+		"	return ss.str();\n"
+		"}\n"
+		"\n"
+		"static int getMilliseconds(const time_point<system_clock>& current)\n"
+		"{\n"
+		"        auto s = duration_cast<seconds>(current.time_since_epoch()).count();\n"
+		"	auto millis = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();\n"
+		"	return millis - s * 1000;\n"
+		"}\n"
+		"\n"
+		"static string getTime()\n"
+		"{\n"
+		"	auto current = system_clock::now();\n"
+		"	auto t = system_clock::to_time_t(current);\n"
+		"	stringstream ss;\n"
+		"	ss << put_time(localtime(&t), \"%H:%M:%S.\") << setw(3) << setfill('0') << getMilliseconds(current);\n"
+		"	return ss.str();\n"
+		"}\n"
+		"\n"
+		"\n"
+		"\n"
+		"static void writeToFile(const string& fileName, const string& text )\n"
+		"{\n"
+		"	ofstream file(fileName, ios_base::app);\n"
+		"	file << getTime() << \"\\t\" << text << \"\\n\";\n"
+		"}\n"
+		"\n"
+		"void Logger::write(const string& text)\n"
+		"{\n"
+		"	writeToFile(getFileName(), text);\n"
+		"}\n";
+}
+
+static void generateLoggerHeader()
+{
+	writeFileContent("Logger.h", loggerHeader());
+}
+
+static void generateLoggerCpp()
+{
+	writeFileContent("Logger.cpp", loggerCpp());
+}
+
+bool generateLogger()
+{
+	generateLoggerHeader();
+	generateLoggerCpp();
+	return true;
+}
+
+

@@ -23,6 +23,7 @@ static string authorInfo(const string& fileName)
 		"********************************************************************************/\n";
 }
 
+
 static bool generateCppFile(const string& className)
 {
 	ofstream file(className + ".cpp");
@@ -640,4 +641,25 @@ bool generateLogger()
 	return true;
 }
 
+std::string contentBoostCMake()
+{
+	return "cmake_minimum_required(VERSION 3.0)\n"
+		"project(boostTest)\n"
+		"find_package(Boost REQUIRED COMPONENTS system thread)\n"
+		"include_directories(${Boost_INCLUDE_DIRS})\n"
+		"set(sources main.cpp)\n"
+		"add_executable(${PROJECT_NAME} ${sources})\n"
+		"target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})\n";
+}
 
+static void generateBoostCMakeFile(const std::string& name)
+{
+	writeFileContent("CMakeLists.txt", contentBoostCMake());
+}
+
+bool generateBoostProject(const std::string& name)
+{
+	generateBoostCMakeFile(name);
+	generateMainFile();
+	return true;
+}

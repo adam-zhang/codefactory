@@ -641,10 +641,10 @@ bool generateLogger()
 	return true;
 }
 
-std::string contentBoostCMake()
+std::string contentBoostCMake(const std::string& name)
 {
 	return "cmake_minimum_required(VERSION 3.0)\n"
-		"project(boostTest)\n"
+		"project(" + name + ")\n"
 		"find_package(Boost REQUIRED COMPONENTS system thread)\n"
 		"include_directories(${Boost_INCLUDE_DIRS})\n"
 		"set(sources main.cpp)\n"
@@ -654,7 +654,7 @@ std::string contentBoostCMake()
 
 static void generateBoostCMakeFile(const std::string& name)
 {
-	writeFileContent("CMakeLists.txt", contentBoostCMake());
+	writeFileContent("CMakeLists.txt", contentBoostCMake(name));
 }
 
 bool generateBoostProject(const std::string& name)

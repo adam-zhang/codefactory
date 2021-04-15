@@ -70,7 +70,7 @@ static bool generateCMakeFile(const std::string& projectName)
 	ofstream file("CMakeLists.txt");
 	if (!file)
 		return false;
-	file << "cmake_minimum_required(VERSION 2.8)\n"
+	file << "cmake_minimum_required(VERSION 3.0)\n"
 		<< "project(" << projectName << ")\n"
 		<< "set(sources main.cpp)\n"
 		<< "add_executable(${PROJECT_NAME} ${sources})";

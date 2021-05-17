@@ -47,8 +47,8 @@ static bool generateHeadFile(const string& className)
 	if (!file)
 		return false;
 	file << authorInfo(className + ".h")
-		<< "#ifndef __" << toUpper(className) << "__H\n" 
-		<<"#define __" << toUpper(className) << "__H\n"
+		<< "#ifndef " << toUpper(className) << "_H\n" 
+		<<"#define " << toUpper(className) << "_H\n"
 		<< "\n\n"
 		<< "class " << className << "\n"
 		<< "{\n"
@@ -56,7 +56,7 @@ static bool generateHeadFile(const string& className)
 		<< "\t" << className << "();\n"
 		<< "\t~" << className << "();\n"
 		<< "};\n"
-		<<"#endif//__" << toUpper(className) << "__H" << endl;
+		<<"#endif//" << toUpper(className) << "_H" << endl;
 	return true;
 }
 
@@ -161,8 +161,8 @@ bool generateMainWindowHeadFile()
 	if (!file)
 		return false;	
 	stringstream ss;
-	ss << "#ifndef __MAINWINDOW__H\n"
-		<< "#define __MAINWINDOW__H\n"
+	ss << "#ifndef MAINWINDOW_H\n"
+		<< "#define MAINWINDOW_H\n"
 		<< "#include <QMainWindow>\n"
 		<< "\n"
 		<< "class MainWindow : public QMainWindow\n"
@@ -172,7 +172,7 @@ bool generateMainWindowHeadFile()
 		<< "\tMainWindow(QWidget* parent = 0);\n"
 		<< "\t~MainWindow();\n"
 		<< "};\n\n"
-		<< "#endif//__MAINWINDOW__H";
+		<< "#endif//MAINWINDOW_H";
 	file << ss.str();
 	return true;
 }
@@ -206,8 +206,8 @@ bool generateQtProject(const string& projectName)
 
 const std::string content()
 {
-	return	"#ifndef __SINGLETON__H\n" 
-		"#define __SINGLETON__H\n"
+	return	"#ifndef SINGLETON_H\n" 
+		"#define SINGLETON_H\n"
 		"\n"
 		"#include <memory>\n"
 		"#include <mutex>\n"
@@ -266,7 +266,7 @@ const std::string content()
 		"template<typename T, typename Lock>\n"
 		"T* Singleton<T, Lock>::instance_ = 0;\n"
 		"\n"
-		"#endif//__SINGLETON__H\n"
+		"#endif//SINGLETON_H\n"
 		"\n";
 }
 
@@ -287,8 +287,8 @@ bool generateSingleton()
 
 string threadPoolHeader()
 {
-	return	"#ifndef __THREADPOOL__H\n"
-		"#define __THREADPOOL__H\n"
+	return	"#ifndef THREADPOOL_H\n"
+		"#define THREADPOOL_H\n"
 		"\n"
 		"#include <vector>\n"
 		"#include <functional>\n"
@@ -321,7 +321,7 @@ string threadPoolHeader()
 		"private:\n"
 		"	void work();\n"
 		"};\n"
-		"#endif//__THREADPOOL__H\n";
+		"#endif//THREADPOOL_H\n";
 }
 
 string threadPoolImpletement()
@@ -408,8 +408,8 @@ bool generateThreadPool()
 
 string properties()
 {
-	return	"#ifndef __PROPERTIES__H\n"
-		"#define __PROPERTIES__H\n"
+	return	"#ifndef PROPERTIES_H\n"
+		"#define PROPERTIES_H\n"
 		"\n"
 		"#define PROPERTY(type, name, method) \\\n"
 		"         private: \\\n"
@@ -419,7 +419,7 @@ string properties()
 		"                  { return name##_; } \\\n"
 		"                  void method(const type& value) \\\n"
 		"                  { name##_ = value; }\n"
-		"#endif//__PROPERTIES__H\n";
+		"#endif//PROPERTIES_H\n";
 }
 
 bool generateProperties()
@@ -431,8 +431,8 @@ bool generateProperties()
 
 string queue()
 {
-	return "#ifndef __QUEUE__H\n"
-		"#define __QUEUE__H \n"
+	return "#ifndef QUEUE_H\n"
+		"#define QUEUE_H \n"
 		"\n"
 		"#include <queue>\n"
 		"#include <mutex>\n"
@@ -476,7 +476,7 @@ string queue()
 		"		}\n"
 		"}; \n"
 		"\n"
-		"#endif//__QUEUE__H\n";
+		"#endif//QUEUE_H\n";
 }
 
 bool generateQueue()
@@ -543,8 +543,8 @@ bool generateOpenGLProject(const std::string& name)
 
 std::string loggerHeader()
 {
-	return "#ifndef __LOGGER__H\n"
-		"#define __LOGGER__H\n"
+	return "#ifndef LOGGER_H\n"
+		"#define LOGGER_H\n"
 		"\n"
 		"#include <string>\n"
 		"#include <sstream>\n"
@@ -564,7 +564,7 @@ std::string loggerHeader()
 		"		write(ss.str());\n"
 		"	}\n"
 		"};\n"
-		"#endif//__LOGGER__H";
+		"#endif//LOGGER_H";
 }
 
 std::string loggerCpp()

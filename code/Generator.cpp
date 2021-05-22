@@ -23,6 +23,11 @@ static string authorInfo(const string& fileName)
 		"********************************************************************************/\n";
 }
 
+static std::string warning()
+{
+	return "add_definitions(-W -Wall -std=c++11)\n";
+}
+
 
 static bool generateCppFile(const string& className)
 {
@@ -73,6 +78,7 @@ static bool generateCMakeFile(const std::string& projectName)
 		return false;
 	file << "cmake_minimum_required(VERSION 3.0)\n"
 		<< "project(" << projectName << ")\n"
+		<< warning() 
 		<< "set(sources main.cpp)\n"
 		<< "add_executable(${PROJECT_NAME} ${sources})";
 	return true;
@@ -106,7 +112,7 @@ static bool generateMainFile()
 
 bool generateProject(const string& projectName)
 {
-       	return generateCMakeFile(projectName) && generateMainFile();
+	return generateCMakeFile(projectName) && generateMainFile();
 }
 
 
@@ -118,6 +124,7 @@ bool generateQtCMakeFile(const string& projectName)
 	stringstream ss;
 	ss << "cmake_minimum_required(VERSION 3.1.0)\n"
 		<< "project(" << projectName << ")\n"
+		<< warning()
 		<< "set(CMAKE_INCLUDE_CURRENT_DIR ON)\n"
 		<< "set(CMAKE_AUTOMOC ON)\n"
 		<< "find_package(Qt5Widgets CONFIG REQUIRED)\n"
@@ -524,6 +531,7 @@ void generateOpenGLCMakeFile(const std::string& name)
 	string content = "cmake_minimum_required(VERSION 2.8)\n"
 		"project(glTest)\n"
 		"find_package(OpenGL REQUIRED)\n"
+		+ warning() +
 		"include_directories(${OpenGL_INCLUDE_DIRS})\n"
 		"link_directories(${OpenGL_LIBRARY_DIRS})\n"
 		"add_definitions(${OpenGL_DEFINITIONS})\n"
@@ -645,6 +653,7 @@ std::string contentBoostCMake(const std::string& name)
 {
 	return "cmake_minimum_required(VERSION 3.0)\n"
 		"project(" + name + ")\n"
+		+ warning() + 
 		"find_package(Boost REQUIRED COMPONENTS system thread)\n"
 		"include_directories(${Boost_INCLUDE_DIRS})\n"
 		"set(sources main.cpp)\n"

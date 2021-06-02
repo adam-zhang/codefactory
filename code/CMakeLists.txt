@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 if (WIN32)
 	set(CMAKE_INSTALL_PREFIX c:/windows/system32)
 else()

@@ -192,6 +192,7 @@ bool generateMainWindowCpp()
 	stringstream ss;
 	ss << "#include \"MainWindow.h\"\n\n"
 		<< "MainWindow::MainWindow(QWidget* parent)\n"
+		<< "\t:QMainWindow(parent)\n"
 		<< "{\n"
 		<< "};\n\n"
 		<< "MainWindow::~MainWindow()\n"

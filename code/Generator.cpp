@@ -92,7 +92,7 @@ static bool generateMainFile()
 	file << "#include <iostream>\n"
 		<< "\nusing namespace std;\n"
 		<< "\n"
-		<< "int main(int argc, char** argv)\n"
+		<< "int main(int /*argc*/, char** /*argv*/)\n"
 		<< "{\n"
 		<< "\tcout << \"Hello World.\" << endl;\n"
 		<< "\treturn 0;\n"

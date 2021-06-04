@@ -13,4 +13,5 @@ bool generateThreadPool();
 bool generateProperties();
 bool generateQueue();
 bool generateLogger();
+bool generateAuthorInfo(const std::string& author, const std::string& email);
 #endif//__GERNERATOR_

@@ -5,50 +5,65 @@
 #include "Generator.h"
 
 
+int dealOneArgument()
+{
+	Logger::output(Notice::usage());
+	return 0;
+}
+
+int dealTwoArguments(const CommandLineAnalyzer& analyzer)
+{
+	if (analyzer.argument(1) == "--singleton")
+		generateSingleton();
+	else if (analyzer.argument(1) == "--threadpool")
+		generateThreadPool();
+	else if (analyzer.argument(1) == "--properties")
+		generateProperties();
+	else if (analyzer.argument(1) == "--queue")
+		generateQueue();
+	else if (analyzer.argument(1) == "--logger")
+		generateLogger();
+	else if (analyzer.argument(1) == "--help")
+		Logger::output(Notice::usage());
+	else
+		Logger::output(Notice::usage());
+	return 0;
+}
+
+int dealThreeArguments(const CommandLineAnalyzer& analyzer)
+{
+	if (analyzer.argument(1) == "--class")
+		generateClass(analyzer.argument(2));
+	else if (analyzer.argument(1) == "--project")
+		generateProject(analyzer.argument(2));
+	else if (analyzer.argument(1) == "--qtproject")
+		generateQtProject(analyzer.argument(2));
+	else if (analyzer.argument(1) == "--openglproject")
+		generateOpenGLProject(analyzer.argument(2));
+	else if (analyzer.argument(1) == "--boostproject")
+		generateBoostProject(analyzer.argument(2));
+	return 0;
+}
+
+int dealFourArguments(const CommandLineAnalyzer& analyzer)
+{
+	generateAuthorInfo(analyzer.argument(2), analyzer.argument(3));
+	return 0;
+}
+
 int main(int argc, char** argv)
 {
 	CommandLineAnalyzer analyzer(argc, argv);
-	if (analyzer.argumentCount() < 2)
+	switch(analyzer.argumentCount())
 	{
-		Logger::output(Notice::usage());
-		return 0;
-	}
-	if (analyzer.argumentCount() == 2) 
-	{ 
-		if (analyzer.argument(1) == "--singleton")
-			generateSingleton();
-		else if (analyzer.argument(1) == "--threadpool")
-			generateThreadPool();
-		else if (analyzer.argument(1) == "--properties")
-			generateProperties();
-		else if (analyzer.argument(1) == "--queue")
-			generateQueue();
-		else if (analyzer.argument(1) == "--logger")
-			generateLogger();
-		else if (analyzer.argument(1) == "--help")
-			Logger::output(Notice::usage());
-		else
-			Logger::output(Notice::usage());
-	}
-	if (analyzer.argumentCount() == 3)
-	{
-		if (analyzer.argument(1) == "--class")
-		{
-			generateClass(analyzer.argument(2));
-			return 0;
-		}
-		else if (analyzer.argument(1) == "--project")
-		{
-			generateProject(analyzer.argument(2));
-		}
-		else if (analyzer.argument(1) == "--qtproject")
-		{
-			generateQtProject(analyzer.argument(2));
-		}
-		else if (analyzer.argument(1) == "--openglproject")
-			generateOpenGLProject(analyzer.argument(2));
-		else if (analyzer.argument(1) == "--boostproject")
-			generateBoostProject(analyzer.argument(2));
+		case 1:
+			return dealOneArgument();
+		case 2:
+			return dealTwoArguments(analyzer);
+		case 3:
+			return dealThreeArguments(analyzer);
+		case 4:
+			return dealFourArguments(analyzer);
 	}
 	return 0;
 }

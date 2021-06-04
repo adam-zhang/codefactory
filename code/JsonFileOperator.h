@@ -16,7 +16,7 @@ public:
 	~JsonFileOperator();
 
 public:
-	std::string read(const std::string& fileName);
-	void write(const std::string& fileName, const std::string& data);
+	static std::string read(const std::string& fileName);
+	static void write(const std::string& fileName, const std::string& data);
 };
 #endif//JSONFILEOPERATOR_H

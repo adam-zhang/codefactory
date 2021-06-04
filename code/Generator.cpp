@@ -1,6 +1,11 @@
 #include "Generator.h"
+#include "JsonFileOperator.h"
 #include "algorithm.h"
+#include "AuthorInfo.h"
+#include "JsonBuilder.h"
+#include <memory>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <chrono>
 #include <ctime>
@@ -678,5 +683,20 @@ bool generateBoostProject(const std::string& name)
 {
 	generateBoostCMakeFile(name);
 	generateMainFile();
+	return true;
+}
+
+static std::string fileName()
+{
+	return std::string(getenv("HOME")) + "/" + std::string(".author_info");
+}
+
+bool generateAuthorInfo(const std::string& authorName, const std::string& email)
+{
+	auto p = std::make_shared<AuthorInfo>();
+	p->setAuthorName(authorName);
+	p->setEmail(email);
+	auto data = JsonBuilder::build(p);
+	JsonFileOperator::write(fileName(), data);
 	return true;
 }

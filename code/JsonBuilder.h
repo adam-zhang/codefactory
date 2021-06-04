@@ -18,6 +18,7 @@ private:
 	JsonBuilder();
 	~JsonBuilder();
 
-	std::string build(const std::shared_ptr<AuthorInfo>&);
+public:
+	static std::string build(const std::shared_ptr<AuthorInfo>&);
 };
 #endif//JSONBUILDER_H

@@ -6,6 +6,8 @@
 ********************************************************************************/
 
 #include "JsonFileOperator.h"
+#include <fstream>
+#include <sstream>
 
 JsonFileOperator::JsonFileOperator()
 {
@@ -19,8 +21,17 @@ JsonFileOperator::~JsonFileOperator()
 std::string JsonFileOperator::read(const std::string& fileName)
 {
 
+	std::ifstream file(fileName);
+	if (!file.good())
+		return std::string();
+	std::stringstream ss;
+	ss << file.rdbuf();
+	return ss.str();
 }
 void JsonFileOperator::write(const std::string& fileName, const std::string& data)
 {
-
+	std::ofstream file(fileName);
+	if (!file.good())
+		return;
+	file << data;
 }

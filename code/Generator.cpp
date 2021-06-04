@@ -13,6 +13,13 @@ string currentTime()
 	return ctime(&tt);
 }
 
+string minimalVersion()
+{
+	return "cmake_minimum_required(VERSION 3.5)";
+}
+
+
+
 static string authorInfo(const string& fileName)
 {
 	return "/********************************************************************************\n"
@@ -76,7 +83,7 @@ static bool generateCMakeFile(const std::string& projectName)
 	ofstream file("CMakeLists.txt");
 	if (!file)
 		return false;
-	file << "cmake_minimum_required(VERSION 3.0)\n"
+	file << minimalVersion() << "\n"
 		<< "project(" << projectName << ")\n"
 		<< warning() 
 		<< "set(sources main.cpp)\n"
@@ -122,7 +129,7 @@ bool generateQtCMakeFile(const string& projectName)
 	if (!file)
 		return false;
 	stringstream ss;
-	ss << "cmake_minimum_required(VERSION 3.1.0)\n"
+	ss << minimalVersion() << "\n"
 		<< "project(" << projectName << ")\n"
 		<< warning()
 		<< "set(CMAKE_INCLUDE_CURRENT_DIR ON)\n"
@@ -529,8 +536,8 @@ void generateSourceFile()
 
 void generateOpenGLCMakeFile(const std::string& name)
 {
-	string content = "cmake_minimum_required(VERSION 2.8)\n"
-		"project(glTest)\n"
+	string content = minimalVersion() + 
+		"\nproject(glTest)\n"
 		"find_package(OpenGL REQUIRED)\n"
 		+ warning() +
 		"include_directories(${OpenGL_INCLUDE_DIRS})\n"
@@ -652,8 +659,8 @@ bool generateLogger()
 
 std::string contentBoostCMake(const std::string& name)
 {
-	return "cmake_minimum_required(VERSION 3.0)\n"
-		"project(" + name + ")\n"
+	return minimalVersion() +
+		"\nproject(" + name + ")\n"
 		+ warning() + 
 		"find_package(Boost REQUIRED COMPONENTS system thread)\n"
 		"include_directories(${Boost_INCLUDE_DIRS})\n"

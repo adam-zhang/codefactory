@@ -112,14 +112,14 @@ static string projectName(const string& name)
 	return "project(" + name + ")";
 }
 
-static bool generateCMakeFile(const std::string& projectName)
+static bool generateCMakeFile(const std::string& name)
 {
 	ofstream file("CMakeLists.txt");
 	if (!file)
 		return false;
 	file << minimalVersion() << "\n"
-		<< "project(" << projectName << ")\n"
-		<< warning() 
+		<< projectName(name) << "\n"
+		<< warning() << "\n" 
 		<< "set(sources main.cpp)\n"
 		<< "add_executable(${PROJECT_NAME} ${sources})";
 	return true;

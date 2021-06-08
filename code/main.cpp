@@ -25,6 +25,8 @@ int dealTwoArguments(const CommandLineAnalyzer& analyzer)
 		generateLogger();
 	else if (analyzer.argument(1) == "--help")
 		Logger::output(Notice::usage());
+	else if (analyzer.argument(1) == "--test")
+		test();
 	else
 		Logger::output(Notice::usage());
 	return 0;

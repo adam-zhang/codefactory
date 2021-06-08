@@ -23,7 +23,31 @@ string minimalVersion()
 	return "cmake_minimum_required(VERSION 3.5)";
 }
 
+static string makeCommentLine(char c)
+{
+	stringstream ss;
+	for(auto i = 0; i != 80; ++i)
+		ss << c;
+	return ss.str();
+}
 
+static string makeFilesComments()
+{
+	return makeCommentLine('#');
+}
+
+static string cppFileComments()
+{
+	return makeCommentLine('/');
+}
+
+static string commentLine(const string& fileName)
+{
+	if (fileName == "CMakeLists.txt")
+		return makeFilesComments();
+	else
+		return cppFileComments();
+}
 
 static string authorInfo(const string& fileName)
 {
@@ -81,6 +105,11 @@ bool generateClass(const string& className)
 {
 	return generateHeadFile(className) && generateCppFile(className);
 	return true;
+}
+
+static string projectName(const string& name)
+{
+	return "project(" + name + ")";
 }
 
 static bool generateCMakeFile(const std::string& projectName)
@@ -699,4 +728,10 @@ bool generateAuthorInfo(const std::string& authorName, const std::string& email)
 	auto data = JsonBuilder::build(p);
 	JsonFileOperator::write(fileName(), data);
 	return true;
+}
+
+void test()
+{
+	cout << makeFilesComments() << "\n"
+	<<	cppFileComments() << "\n";
 }

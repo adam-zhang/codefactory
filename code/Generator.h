@@ -14,5 +14,6 @@ bool generateProperties();
 bool generateQueue();
 bool generateLogger();
 bool generateAuthorInfo(const std::string& author, const std::string& email);
+bool generateQtClass(const std::string& className);
 void test();
 #endif//__GERNERATOR_

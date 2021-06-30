@@ -36,6 +36,8 @@ int dealThreeArguments(const CommandLineAnalyzer& analyzer)
 {
 	if (analyzer.argument(1) == "--class")
 		generateClass(analyzer.argument(2));
+	else if (analyzer.argument(1) == "--qtclass")
+		generateQtClass(analyzer.argument(2));
 	else if (analyzer.argument(1) == "--project")
 		generateProject(analyzer.argument(2));
 	else if (analyzer.argument(1) == "--qtproject")

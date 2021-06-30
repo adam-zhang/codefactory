@@ -3,12 +3,14 @@
 #include "algorithm.h"
 #include "AuthorInfo.h"
 #include "JsonBuilder.h"
+#include "FileOperator.h"
 #include <memory>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <chrono>
 #include <ctime>
+#include <tuple>
 
 using namespace std;
 
@@ -730,8 +732,191 @@ bool generateAuthorInfo(const std::string& authorName, const std::string& email)
 	return true;
 }
 
+std::string beginProtectingLines(const std::string& className)
+{
+	std::stringstream ss;
+	ss << "#ifndef " << toUpper(className) << "_H\n"
+		<< "#define " << toUpper(className) << "_H";
+	return ss.str();
+}
+
+std::string beginClassDeclaration(const std::string& className, const std::string& baseClassName)
+{
+	std::stringstream ss;
+	ss << "class " << className << " : public " << baseClassName << "\n{";
+	return ss.str();
+}
+
+std::string includeFile(const std::string& baseClassName)
+{
+	if (baseClassName[0] == 'Q')
+		return "#include <" + baseClassName + ">";
+	return "#include \"" + baseClassName + ".h\"";
+}
+
+bool isWidget(const std::string& baseClassName)
+{
+	auto classes = {
+		"QPushButton",
+		"QDialog",
+		"QAbstractButton",
+		"QAbstractSlider",
+		"QAbstractSpinBox",
+		"QAxWidget",
+		"QCalendarWidget",
+		"QComboBox",
+		"QDesignerActionEditorInterface",
+		"QDesignerFormWindowInterface",
+		"QDesignerObjectInspectorInterface",
+		"QDesignerPropertyEditorInterface",
+		"QDesignerWidgetBoxInterface",
+		"QDesktopWidget",
+		"QDialog",
+		"QDialogButtonBox",
+		"QDockWidget",
+		"QFocusFrame",
+		"QFrame",
+		"QGLWidget",
+		"QGroupBox",
+		"QHelpSearchQueryWidget",
+		"QHelpSearchResultWidget",
+		"QKeySequenceEdit",
+		"QLineEdit",
+		"QMacCocoaViewContainer",
+		"QMacNativeWidget",
+		"QMainWindow",
+		"QMdiSubWindow",
+		"QMenu",
+		"QMenuBar",
+		"QOpenGLWidget",
+		"QPrintPreviewWidget",
+		"QProgressBar",
+		"QQuickWidget",
+		"QRubberBand",
+		"QSizeGrip",
+		"QSplashScreen",
+		"QSplitterHandle",
+		"QStatusBar",
+		"QSvgWidget",
+		"QTabBar",
+		"QTabWidget",
+		"QToolBar",
+		"QVideoWidget",
+		"QWebEngineView",
+		"QWizardPage",
+		"QLabel"
+	};
+	for(auto item : classes)
+		if (item == baseClassName)
+			return true;
+	return false;
+}
+
+std::string declareConstructor(const std::string& className, const std::string& baseClassName)
+{
+	if (isWidget(baseClassName))
+		return className + "(QWidget* = nullptr);";
+	return className + "(QObject* = nullptr);";
+}
+
+std::string declareDestructor(const std::string& className)
+{ 
+	return "~" + className + "();";
+}
+
+std::string endClassDeclaration()
+{
+	return "}";
+}
+
+std::string endProtectingLines(const std::string& className)
+{
+	return "#endif//" + toUpper(className) + "_H";
+}
+
+std::string headFileContent(const std::string& className, const std::string& baseClassName)
+{
+	std::stringstream ss;
+	ss << authorInfo(className) << "\n"
+		<< beginProtectingLines(className) << "\n\n"
+		<< includeFile(baseClassName) << "\n\n"
+		<< beginClassDeclaration(className, baseClassName) << "\n"
+		<< "public:\n\t"
+		<< declareConstructor(className, baseClassName) << "\n\t"
+		<< declareDestructor(className) << "\n"
+		<< endClassDeclaration() << "\n"
+		<< endProtectingLines(className) << "\n";
+	return ss.str();
+}
+
+bool generateHeadFile(const std::string& className, const std::string& baseClassName)
+{
+	auto s = headFileContent(className, baseClassName);
+	auto fileName = className + ".h";
+	return FileOperator::writeTo(fileName, s);
+}
+
+std::string generateConstructor(const std::string& className, const std::string& baseClassName)
+{
+	std::stringstream ss;
+	ss << className << "::" << className;
+	if (isWidget(baseClassName))
+		ss << "(QWidget* parent)\n";
+	else
+		ss << "(QObject* parent)\n";
+	ss << "\t:" << baseClassName + "(parent)\n"
+		<< "{}";
+	return ss.str();
+}
+
+std::string generateDestructor(const std::string& className)
+{
+	std::stringstream ss;
+	ss << className << "::~" << className << "{}";
+	return ss.str();
+}
+
+bool generateCppFile(const std::string& className, const std::string& baseClassName)
+{
+	std::stringstream ss;
+	ss << authorInfo(className) << "\n"
+		<< "#include \"" << className << "\"\n\n"
+		<< generateConstructor(className, baseClassName) << "\n\n" 
+		<< generateDestructor(className);
+	auto fileName = className + ".cpp";
+	return FileOperator::writeTo(fileName, ss.str());
+}
+
+bool generateQtClass(const std::string& className, const std::string& baseClassName)
+{
+	return generateHeadFile(className, baseClassName)
+		&& generateCppFile(className, baseClassName);
+}
+
+std::tuple<std::string, std::string> split(const std::string& name)
+{
+	auto pos = name.find(':');
+	if ( pos == -1)
+		return std::tuple<std::string, std::string>();
+	auto first = name.substr(0, pos);
+	auto second = name.substr(pos + 1);
+	return std::make_tuple(first, second);
+}
+
+
+bool generateQtClass(const std::string& expression )
+{
+	auto pair = split(expression);
+	std::cout << std::get<0>(pair) << " " << std::get<1>(pair);
+	//return false;
+	return generateQtClass(std::get<0>(pair), std::get<1>(pair));
+}
+
+
 void test()
 {
-	cout << makeFilesComments() << "\n"
-	<<	cppFileComments() << "\n";
+	auto s = "derived:base";
+	generateQtClass(s);
+	s = "Clickable:QLabel";
+	generateQtClass(s);
 }

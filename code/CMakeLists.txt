@@ -17,6 +17,7 @@ set(sources main.cpp
 	JsonParser.cpp
 	JsonBuilder.cpp
 	JsonFileOperator.cpp
+	FileOperator.cpp
 	)
 add_executable(${PROJECT_NAME} ${sources})
 install(TARGETS codefactory DESTINATION /usr/bin)

@@ -844,7 +844,7 @@ std::string declareDestructor(const std::string& className)
 
 std::string endClassDeclaration()
 {
-	return "}";
+	return "};";
 }
 
 std::string endProtectingLines(const std::string& className)
@@ -890,7 +890,7 @@ std::string generateConstructor(const std::string& className, const std::string&
 std::string generateDestructor(const std::string& className)
 {
 	std::stringstream ss;
-	ss << className << "::~" << className << "{}";
+	ss << className << "::~" << className << "(){}";
 	return ss.str();
 }
 
@@ -898,7 +898,7 @@ bool generateCppFile(const std::string& className, const std::string& baseClassN
 {
 	std::stringstream ss;
 	ss << authorInfo(className) << "\n"
-		<< "#include \"" << className << "\"\n\n"
+		<< "#include \"" << className << ".h\"\n\n"
 		<< generateConstructor(className, baseClassName) << "\n\n" 
 		<< generateDestructor(className);
 	auto fileName = className + ".cpp";

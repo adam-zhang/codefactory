@@ -63,7 +63,7 @@ static string authorInfo(const string& fileName)
 
 static std::string warning()
 {
-	return "add_definitions(-W -Wall -std=c++11)\n";
+	return "add_definitions(-Wall)";
 }
 
 
@@ -114,6 +114,11 @@ static string projectName(const string& name)
 	return "project(" + name + ")";
 }
 
+static string standard()
+{
+	return "set(CMAKE_CXX_STANDARD 11)";
+}
+
 static bool generateCMakeFile(const std::string& name)
 {
 	ofstream file("CMakeLists.txt");
@@ -122,6 +127,7 @@ static bool generateCMakeFile(const std::string& name)
 	file << minimalVersion() << "\n"
 		<< projectName(name) << "\n"
 		<< warning() << "\n" 
+		<< standard() << "\n"
 		<< "set(sources main.cpp)\n"
 		<< "add_executable(${PROJECT_NAME} ${sources})";
 	return true;
@@ -984,6 +990,7 @@ std::string headFileContent(const std::string& className, const std::string& bas
 		<< beginProtectingLines(className) << "\n\n"
 		<< includeFile(baseClassName) << "\n\n"
 		<< beginClassDeclaration(className, baseClassName) << "\n"
+		<< "\tQ_OBJECT\n"
 		<< "public:\n\t"
 		<< declareConstructor(className, baseClassName) << "\n\t"
 		<< declareDestructor(className) << "\n"
@@ -1032,6 +1039,7 @@ bool generateCppFile(const std::string& className, const std::string& baseClassN
 
 bool generateQtClass(const std::string& className, const std::string& baseClassName)
 {
+	//cout << className << ":" << baseClassName << endl;
 	return generateHeadFile(className, baseClassName)
 		&& generateCppFile(className, baseClassName);
 }

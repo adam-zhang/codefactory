@@ -116,7 +116,7 @@ static string projectName(const string& name)
 
 static string standard()
 {
-	return "set(CMAKE_CXX_STANDARD 11)";
+	return "set(CMAKE_CXX_STANDARD 14)";
 }
 
 static bool generateCMakeFile(const std::string& name)
@@ -129,7 +129,8 @@ static bool generateCMakeFile(const std::string& name)
 		<< warning() << "\n" 
 		<< standard() << "\n"
 		<< "set(sources main.cpp)\n"
-		<< "add_executable(${PROJECT_NAME} ${sources})";
+		<< "add_executable(${PROJECT_NAME} ${sources})\n"
+		<< "#target_link_libraries(${PROJECT_NAME})\n";
 	return true;
 }
 

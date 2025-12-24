@@ -12,7 +12,7 @@ string Notice::usage()
 		"\t--boostproject <project_name>   		produce a project for boost\n"
 		"\t--class <class_name>            		produce a class which named class_name\n"
 		"\t--qtclass <class_name>:<base_class_name>	produce a class base on base_class\n" 
-		"\t--singleton                     		produce a file contains a singleton class\n"
+		"\t--singleton <class_name>            		produce a file contains a singleton class\n"
 		"\t--threadpool                    		produce the files for thread pool\n"
 		"\t--properties                    		produce a file contains a macro which can produce a property simply.\n"
 		"\t--queue                         		produce a file onntains a thread safe queue.\n"

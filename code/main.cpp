@@ -47,6 +47,7 @@ int dealThreeArguments(const CommandLineAnalyzer& analyzer)
 		,{"--qtproject", generateQtProject}
 		,{"--openglproject", generateOpenGLProject}
 		,{"--boostproject", generateBoostProject}
+		,{"--project", generateProject}
 	};
 
 	if (m.find(analyzer.argument(1)) != m.end())

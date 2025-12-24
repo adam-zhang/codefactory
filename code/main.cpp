@@ -5,6 +5,7 @@
 #include "Generator.h"
 #include <map>
 #include <functional>
+#include "Printer.h"
 
 using namespace std;
 
@@ -24,8 +25,7 @@ int dealTwoArguments(const CommandLineAnalyzer& analyzer)
 {
 	auto m = map<string, function<bool()>>
 	{
-		{"--singleton", generateSingleton}
-		, {"--threadpool", generateThreadPool}
+		{"--threadpool", generateThreadPool}
 		, {"--queue", generateQueue}
 		, {"--logger", generateLogger}
 		, {"--properties", generateProperties}
@@ -48,6 +48,7 @@ int dealThreeArguments(const CommandLineAnalyzer& analyzer)
 		,{"--openglproject", generateOpenGLProject}
 		,{"--boostproject", generateBoostProject}
 		,{"--project", generateProject}
+		,{"--singleton", generateSingleton}
 	};
 
 	if (m.find(analyzer.argument(1)) != m.end())

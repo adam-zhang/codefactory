@@ -262,70 +262,92 @@ bool generateQtProject(const string& projectName)
 	return generateQtCMakeFile(projectName) && generateQtMainFile() && generateMainWindowFiles();
 }
 
-const std::string content()
+//const std::string content()
+//{
+//	return	"#ifndef SINGLETON_H\n" 
+//		"#define SINGLETON_H\n"
+//		"\n"
+//		"#include <memory>\n"
+//		"#include <mutex>\n"
+//		"\n"
+//		"class FakeLock\n"
+//		"{\n"
+//		"	public:\n"
+//		"		FakeLock() {}\n"
+//		"		~FakeLock() {}\n"
+//		"	public:\n"
+//		"		void lock() {}\n"
+//		"		void unlock() {}\n"
+//		"};\n"
+//		"\n"
+//		"class RealLock\n"
+//		"{\n"
+//		"		std::mutex mutex_;\n"
+//		"	public:\n"
+//		"		void lock()\n"
+//		"		{\n"
+//		"			mutex_.lock();\n"
+//		"		}\n"
+//		"\n"
+//		"		void unlock()\n"
+//		"		{\n"
+//		"			mutex_.unlock();\n"
+//		"		}\n"
+//		"\n"
+//		"};\n"
+//		"\n"
+//		"template<typename T, typename Lock = FakeLock>\n"
+//		"class Singleton\n"
+//		"{\n"
+//		"public:\n"
+//		"	Singleton() {}\n"
+//		"	~Singleton() {}\n"
+//		"private:\n"
+//		"	static T* instance_;\n"
+//		"public:\n"
+//		"	static T& instance()\n"
+//		"	{\n"
+//		"		if (!instance_)\n"
+//		"		{\n"
+//		"			Lock lock;\n"
+//		"			lock.lock();\n"
+//		"			if (!instance_)\n"
+//		"			{\n"
+//		"				instance_ = new T;\n"
+//		"			}\n"
+//		"			lock.unlock();\n"
+//		"		}\n"
+//		"		return *instance_;\n"
+//		"	}\n"
+//		"};\n"
+//		"\n"
+//		"template<typename T, typename Lock>\n"
+//		"T* Singleton<T, Lock>::instance_ = 0;\n"
+//		"\n"
+//		"#endif//SINGLETON_H\n"
+//		"\n";
+//}
+
+string content(const std::string& className)
 {
-	return	"#ifndef SINGLETON_H\n" 
-		"#define SINGLETON_H\n"
-		"\n"
-		"#include <memory>\n"
-		"#include <mutex>\n"
-		"\n"
-		"class FakeLock\n"
-		"{\n"
-		"	public:\n"
-		"		FakeLock() {}\n"
-		"		~FakeLock() {}\n"
-		"	public:\n"
-		"		void lock() {}\n"
-		"		void unlock() {}\n"
-		"};\n"
-		"\n"
-		"class RealLock\n"
-		"{\n"
-		"		std::mutex mutex_;\n"
-		"	public:\n"
-		"		void lock()\n"
-		"		{\n"
-		"			mutex_.lock();\n"
-		"		}\n"
-		"\n"
-		"		void unlock()\n"
-		"		{\n"
-		"			mutex_.unlock();\n"
-		"		}\n"
-		"\n"
-		"};\n"
-		"\n"
-		"template<typename T, typename Lock = FakeLock>\n"
-		"class Singleton\n"
-		"{\n"
-		"public:\n"
-		"	Singleton() {}\n"
-		"	~Singleton() {}\n"
-		"private:\n"
-		"	static T* instance_;\n"
-		"public:\n"
-		"	static T& instance()\n"
-		"	{\n"
-		"		if (!instance_)\n"
-		"		{\n"
-		"			Lock lock;\n"
-		"			lock.lock();\n"
-		"			if (!instance_)\n"
-		"			{\n"
-		"				instance_ = new T;\n"
-		"			}\n"
-		"			lock.unlock();\n"
-		"		}\n"
-		"		return *instance_;\n"
-		"	}\n"
-		"};\n"
-		"\n"
-		"template<typename T, typename Lock>\n"
-		"T* Singleton<T, Lock>::instance_ = 0;\n"
-		"\n"
-		"#endif//SINGLETON_H\n"
-		"\n";
+	stringstream ss;
+	ss << "class  " << className << "\n";
+	ss << "{\n";
+	ss << "\tpublic:\n";
+	ss << "\t\t" << className << "(const " << className << "&) = delete;\n";
+	ss << "\t\t" << className << "& operator=(const " << className << "&) = delete;\n";
+	ss << "\n";
+	ss << "\t\tstatic " << className << "& getInstance()\n";
+	ss << "\t\t{\n";
+	ss << "\t\t\tstatic  " << className << "  instance;\n";
+	ss << "\t\t\treturn instance;\n";
+	ss << "\t\t}\n";
+	ss << "\n";
+	ss << "\tprivate:\n";
+	ss << "\t\t" << className << " () = default;\n";
+	ss << "\t\t~" << className << " () = default;\n";
+	ss << "};\n";
+	return ss.str();
 }
 
 void writeFileContent(const std::string& fileName, const std::string& content)
@@ -336,10 +358,10 @@ void writeFileContent(const std::string& fileName, const std::string& content)
 	file << content << std::endl;
 }
 
-bool generateSingleton()
+bool generateSingleton(const string& className)
 {
-	auto fileName = "Singleton.h";
-	writeFileContent(fileName, content());
+	//auto fileName = "Singleton.h";
+	writeFileContent(className + ".h", content(className));
 	return true;
 }
 

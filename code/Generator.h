@@ -8,7 +8,7 @@ bool generateProject(const std::string& name);
 bool generateQtProject(const std::string& name);
 bool generateOpenGLProject(const std::string& name);
 bool generateBoostProject(const std::string& name);
-bool generateSingleton();
+bool generateSingleton(const std::string&);
 bool generateThreadPool();
 bool generateProperties();
 bool generateQueue();

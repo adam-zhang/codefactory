@@ -5,7 +5,7 @@
 #include "Generator.h"
 
 
-int dealOneArgument()
+int dealOneArgument(const CommandLineAnalyzer&)
 {
 	Logger::output(Notice::usage());
 	return 0;
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 	switch(analyzer.argumentCount())
 	{
 		case 1:
-			return dealOneArgument();
+			return dealOneArgument(analyzer);
 		case 2:
 			return dealTwoArguments(analyzer);
 		case 3:

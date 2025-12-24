@@ -11,6 +11,7 @@
 #include <chrono>
 #include <ctime>
 #include <tuple>
+#include <algorithm>
 
 using namespace std;
 
@@ -978,10 +979,14 @@ bool isWidget(const std::string& baseClassName)
 		"QWindow",
 		"QWizardPageg"
 	};
-	for(auto item : classes)
-		if (item == baseClassName)
-			return true;
-	return false;
+	return any_of(classes.begin(), classes.end(), [&baseClassName](const string& item)
+			{
+				return item == baseClassName;
+			});
+	//for(auto item : classes)
+	//	if (item == baseClassName)
+	//		return true;
+	//return false;
 }
 
 std::string declareConstructor(const std::string& className, const std::string& baseClassName)

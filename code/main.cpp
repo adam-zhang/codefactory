@@ -3,7 +3,10 @@
 #include "Logger.h"
 #include "Notice.h"
 #include "Generator.h"
+#include <map>
+#include <functional>
 
+using namespace std;
 
 int dealOneArgument(const CommandLineAnalyzer&)
 {
@@ -58,16 +61,15 @@ int dealFourArguments(const CommandLineAnalyzer& analyzer)
 int main(int argc, char** argv)
 {
 	CommandLineAnalyzer analyzer(argc, argv);
-	switch(analyzer.argumentCount())
+	auto m = map<int, function<int(const CommandLineAnalyzer&)>> 
 	{
-		case 1:
-			return dealOneArgument(analyzer);
-		case 2:
-			return dealTwoArguments(analyzer);
-		case 3:
-			return dealThreeArguments(analyzer);
-		case 4:
-			return dealFourArguments(analyzer);
-	}
+		{1, dealOneArgument},
+			{2, dealTwoArguments},
+			{3, dealThreeArguments},
+			{4, dealFourArguments}
+	};
+	
+	if (m.find(analyzer.argumentCount()) != m.end())
+		return m[analyzer.argumentCount()](analyzer);
 	return 0;
 }

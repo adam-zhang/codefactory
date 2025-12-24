@@ -332,6 +332,7 @@ bool generateQtProject(const string& projectName)
 string content(const std::string& className)
 {
 	stringstream ss;
+	ss << authorInfo(className) << "\n";
 	ss << "class  " << className << "\n";
 	ss << "{\n";
 	ss << "\tpublic:\n";

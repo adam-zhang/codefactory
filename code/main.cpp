@@ -14,41 +14,43 @@ int dealOneArgument(const CommandLineAnalyzer&)
 	return 0;
 }
 
+bool showHelp()
+{
+	Logger::output(Notice::usage());
+	return true;
+}
+
 int dealTwoArguments(const CommandLineAnalyzer& analyzer)
 {
-	if (analyzer.argument(1) == "--singleton")
-		generateSingleton();
-	else if (analyzer.argument(1) == "--threadpool")
-		generateThreadPool();
-	else if (analyzer.argument(1) == "--properties")
-		generateProperties();
-	else if (analyzer.argument(1) == "--queue")
-		generateQueue();
-	else if (analyzer.argument(1) == "--logger")
-		generateLogger();
-	else if (analyzer.argument(1) == "--help")
-		Logger::output(Notice::usage());
-	else if (analyzer.argument(1) == "--test")
-		test();
-	else
-		Logger::output(Notice::usage());
+	auto m = map<string, function<bool()>>
+	{
+		{"--singleton", generateSingleton}
+		, {"--threadpool", generateThreadPool}
+		, {"--queue", generateQueue}
+		, {"--logger", generateLogger}
+		, {"--properties", generateProperties}
+		, {"--help", showHelp}
+	};
+
+	if (m.find(analyzer.argument(1)) != m.end())
+		return m[analyzer.argument(1)]();
+	Logger::output(Notice::usage());
 	return 0;
 }
 
 int dealThreeArguments(const CommandLineAnalyzer& analyzer)
 {
-	if (analyzer.argument(1) == "--class")
-		generateClass(analyzer.argument(2));
-	else if (analyzer.argument(1) == "--qtclass")
-		generateQtClass(analyzer.argument(2));
-	else if (analyzer.argument(1) == "--project")
-		generateProject(analyzer.argument(2));
-	else if (analyzer.argument(1) == "--qtproject")
-		generateQtProject(analyzer.argument(2));
-	else if (analyzer.argument(1) == "--openglproject")
-		generateOpenGLProject(analyzer.argument(2));
-	else if (analyzer.argument(1) == "--boostproject")
-		generateBoostProject(analyzer.argument(2));
+	auto m = map<string, function<bool(string)>>
+	{
+		{"--qtclass", generateQtClass}
+		,{"--class", generateClass}
+		,{"--qtproject", generateQtProject}
+		,{"--openglproject", generateOpenGLProject}
+		,{"--boostproject", generateBoostProject}
+	};
+
+	if (m.find(analyzer.argument(1)) != m.end())
+		return m[analyzer.argument(1)](analyzer.argument(2));
 	return 0;
 }
 

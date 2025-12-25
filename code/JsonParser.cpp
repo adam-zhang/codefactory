@@ -17,10 +17,10 @@ JsonParser::~JsonParser()
 {
 }
 
-std::shared_ptr<AuthorInfo> JsonParser::parseAuthorInfo(const std::string& data)
+std::unique_ptr<AuthorInfo> JsonParser::parseAuthorInfo(const std::string& data)
 {
 	nlohmann::json json = nlohmann::json::parse(data);
-	auto p = std::make_shared<AuthorInfo>();
+	auto p = std::make_unique<AuthorInfo>();
 	p->setAuthorName(json["author_name"]);
 	p->setEmail(json["email"]);
 	return p;

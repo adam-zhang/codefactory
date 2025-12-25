@@ -18,6 +18,6 @@ private:
 	JsonParser();
 	~JsonParser();
 
-	std::shared_ptr<AuthorInfo> parseAuthorInfo(const std::string& data);
+	std::unique_ptr<AuthorInfo> parseAuthorInfo(const std::string& data);
 };
 #endif//JSONPARSER_H

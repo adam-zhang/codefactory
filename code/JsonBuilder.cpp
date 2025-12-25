@@ -17,7 +17,7 @@ JsonBuilder::~JsonBuilder()
 {
 }
 
-std::string JsonBuilder::build(const std::shared_ptr<AuthorInfo>& p)
+std::string JsonBuilder::build(const std::unique_ptr<AuthorInfo>& p)
 {
 	nlohmann::json json;
 	json["author_name"] = p->authorName();

@@ -708,7 +708,7 @@ static std::string fileName()
 
 bool generateAuthorInfo(const std::string& authorName, const std::string& email)
 {
-	auto p = std::make_shared<AuthorInfo>();
+	auto p = std::make_unique<AuthorInfo>();
 	p->setAuthorName(authorName);
 	p->setEmail(email);
 	auto data = JsonBuilder::build(p);
